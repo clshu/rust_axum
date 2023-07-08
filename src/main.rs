@@ -9,7 +9,7 @@ async fn main() {
     // build our application with a single route
     let routes_hello = Router::new().route(
         "/hello",
-        get(|| async { Html("<h1>Hello, <strong>World<strong>!<h1>") }),
+        get(|| async { Html("Hello <strong>World!!!<strong>") }),
     );
 
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
