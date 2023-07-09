@@ -8,19 +8,24 @@ use std::net::SocketAddr;
 #[tokio::main]
 async fn main() {
     // build our application with a single route
-    let routes_hello = Router::new()
-        .route("/hello", get(handler_hello))
-        .route("/hello2/:name", get(handler_hello2));
-
+    let routes_all = Router::new().merge(routes_hello());
+    // Create socket address
     let addr = SocketAddr::from(([127, 0, 0, 1], 3000));
     // run it with hyper on localhost:3000
     println!("->> LISTENING on {addr}\n");
     axum::Server::bind(&addr)
-        .serve(routes_hello.into_make_service())
+        .serve(routes_all.into_make_service())
         .await
         .unwrap();
 }
+// Routers
+fn routes_hello() -> Router {
+    Router::new()
+        .route("/hello", get(handler_hello))
+        .route("/hello2/:name", get(handler_hello2))
+}
 
+// Handlers
 #[derive(Debug, Deserialize)]
 struct HelloParams {
     name: Option<String>,
